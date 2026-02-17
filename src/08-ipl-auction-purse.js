@@ -13,15 +13,15 @@
  *     - totalSpent: sum of all player prices (use reduce)
  *     - remaining: purse - totalSpent
  *     - playerCount: total players bought
- *     - costliestPlayer: player object with highest price
- *     - cheapestPlayer: player object with lowest price
- *     - averagePrice: Math.round(totalSpent / playerCount)
- *     - byRole: object counting players per role using reduce
+ *     - costliestPlaayer: player object with lowest price
+ *     - averagePyer: player object with highest price
+ *     - cheapestPlrice: Math.round(totalSpent / playerCount)
+/ *     - byRole: object counting players per role using reduce
  *       e.g., { bat: 3, bowl: 4, ar: 2, wk: 1 }
  *     - isOverBudget: boolean, true agar totalSpent > purse
  *   - Hint: Use reduce(), filter(), sort(), find(), every(), some(),
  *     Array.isArray(), Math.round(), spread operator
- *
+ *7
  * Validation:
  *   - Agar team object nahi hai ya team.purse positive number nahi hai, return null
  *   - Agar players array nahi hai ya empty hai, return null
@@ -45,4 +45,46 @@
  */
 export function iplAuctionSummary(team, players) {
   // Your code here
+  if (
+    typeof team !== "object" ||
+    team === null ||
+    typeof team.purse !== "number" ||
+    !Number.isFinite(team.purse) ||
+    team.purse <= 0
+  )
+    return null;
+  if (!Array.isArray(players) || players.length === 0) return null;
+  const totalSpent = players.reduce((sum, player) => sum + player.price, 0);
+  const teamName = team.name;
+  const remaining = team.purse - totalSpent;
+  const playerCount = players.length;
+  const costliestPlayer = players.reduce((acc, curr) =>
+    acc.price > curr.price ? acc : curr,
+  );
+  const cheapestPlayer = players.reduce((acc, curr) =>
+    acc.price < curr.price ? acc : curr,
+  );
+  const averagePrice = Math.round(totalSpent / players.length);
+  const byRole = players.reduce((acc, curr) => {
+    if (acc[curr.role]) {
+      acc[curr.role] += 1;
+    } else {
+      acc[curr.role] = 1;
+    }
+    return acc;
+  }, {});
+
+  const isOverBudget = totalSpent > team.purse;
+
+  return {
+    teamName,
+    totalSpent,
+    remaining,
+    playerCount,
+    costliestPlayer,
+    cheapestPlayer,
+    averagePrice,
+    byRole,
+    isOverBudget,
+  };
 }

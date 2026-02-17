@@ -29,4 +29,18 @@
  */
 export function maskAadhaar(aadhaarNumber) {
   // Your code here
+  if (typeof aadhaarNumber !== "string") {
+    return "INVALID";
+  }
+  if (aadhaarNumber.length !== 12) {
+    return "INVALID";
+  }
+  for (let i = 0; i < aadhaarNumber.length; i++) {
+    if (isNaN(aadhaarNumber[i])) {
+      return "INVALID";
+    }
+  }
+  const markedPart = "X".repeat(8);
+  const lastFourDigit = aadhaarNumber.slice(-4);
+  return `${markedPart.slice(0, 4)}-${markedPart.slice(4, 8)}-${lastFourDigit}`;
 }
